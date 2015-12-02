@@ -7,7 +7,10 @@
 #define VER 10
 
 //protocol used
-#define PROTOCOL_HOTT
+//#define PROTOCOL_HOTT_BT      //Bluetooth 
+#define PROTOCOL_HOTT_DATA    //DATA Port
+
+
 
 #define PIN_BT_STATUS    6  // BT status, any digital pin
 #define PIN_BT_PIN34     7  // BT mode, any digital pin

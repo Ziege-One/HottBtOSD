@@ -71,6 +71,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>
 #endif
 #include <EEPROM.h>
 #include <Metro.h>
+#include <SoftwareSerial.h>
 
 #ifdef membug
 #include <MemoryFree.h>
@@ -83,6 +84,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>
 #include "OSD_Func.h"
 
 #include "HottBtUsb.cpp"
+#include "HottDATA.cpp"
 
 /* *************************************************/
 /* ***************** DEFINITIONS *******************/
