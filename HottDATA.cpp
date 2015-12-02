@@ -27,7 +27,7 @@
 #define HOTT_WAIT_GAM		6
 #define HOTT_REQUEST_RX		7
 #define HOTT_WAIT_RX		8
-#define HOTT_IDLE			10
+#define HOTT_IDLE		10
 
 /* local functions */
 static void vHottFormatGpsString(char *buffer, uint16_t high, uint16_t low);
@@ -59,12 +59,7 @@ static uint16_t ui16RxFail = 0;
 struct
 	__attribute__((__packed__))
 	{
-        uint8_t startByte;        //#01 0x7C = Start byte data 
-        uint8_t sensorID;         //#02 0x8A = GPS Sensor
-        uint8_t warning_beeps;    //#03 0…= warning beeps */
-        uint8_t sensorTextID;     //#04 0xA0 Sensor ID Neu! */
-        uint8_t alarmInverse1;    //#05 01 inverse status */
-        uint8_t alarmInverse2;    //#06 00 inverse status status 1 = kein GPS Signal */
+        uint8_t DummyH[16];
         uint8_t flightDirection;  //#07 119 = Flightdir./dir. 1 = 2°; 0°(North), 90°(East), 180°(South), 270°(West) */
         uint16_t GPSSpeed;        //#08 8 = /GPS speed low byte 8km/h */
                                   //#09 MSB 
@@ -131,12 +126,7 @@ struct
 struct
       __attribute__((__packed__))
       {
-      byte start_byte;          //#01 start byte constant value 0x7c
-      byte eam_sensor_id;       //#02 EAM sensort id. constat value 0x8d=GENRAL AIR MODULE
-      byte warning_beeps;       //#03 1=A 2=B ... 0x1a=Z  0 = no alarm
-      byte sensor_id;           //#04 constant value 0xe0
-      byte alarm_invers1;       //#05 alarm bitmask. Value is displayed inverted
-      byte alarm_invers2;       //#06 alarm bitmask. Value is displayed inverted
+      uint8_t DummyH[16];
       byte cell_L[7];           //#7 Volt Cell_L 1 (in 2 mV increments, 210 == 4.20 V)
                                 //#8 Volt Cell_L 2 (in 2 mV increments, 210 == 4.20 V)
                                 //#9 Volt Cell_L 3 (in 2 mV increments, 210 == 4.20 V)
@@ -181,46 +171,48 @@ struct
 struct
       __attribute__((__packed__))
       {
-		uint8_t DummyH[22];
-		uint16_t Battery1;
-		uint16_t Battery2;
-		uint8_t temperature1;
-		uint8_t temperature2;
-
-                uint8_t DummyG[7];
-                
-                uint16_t climbrate_L;
-		uint8_t climbrate3s;
-		uint16_t current;
-                uint16_t main_voltage;
-		uint16_t batt_cap;
-
-                uint8_t DummyD[12];
-
-/*
-		uint16_t cell[6];
-		uint16_t Battery1;
-		uint16_t Battery2;
-		uint16_t temperature1;
-		uint16_t temperature2;
-		uint16_t rpm;
-		uint16_t altitude;
-		uint16_t current;
-		uint16_t main_voltage;
-		uint16_t batt_cap;
-		uint16_t fuel_ml;
-		uint8_t OilLevel;
-
-		uint8_t DBM;
-		uint8_t Free;
-		uint16_t speed;
-		uint16_t min_cell_volt;
-		uint16_t rpm2;
-		uint8_t min_cell_volt_num;
-		uint8_t general_error_number;
-		uint8_t pressure;
-		uint8_t Version;
-//		uint16_t ui16DummyD;*/
+      uint8_t DummyH[16];
+      byte cell[6];	        //#17 Volt Cell 1 (in 2 mV increments, 210 == 4.20 V)
+	                        //#18 Volt Cell 2 (in 2 mV increments, 210 == 4.20 V)
+			        //#19 Volt Cell 3 (in 2 mV increments, 210 == 4.20 V)
+			        //#20 Volt Cell 4 (in 2 mV increments, 210 == 4.20 V)
+			        //#21 Volt Cell 5 (in 2 mV increments, 210 == 4.20 V)
+			        //#22 Volt Cell 6 (in 2 mV increments, 210 == 4.20 V)
+      uint16_t  Battery1;       //#23 LSB battery 1 voltage LSB value. 0.1V steps. 50 = 5.5V only pos. voltages
+				//#24 MSB 
+      uint16_t  Battery2;       //#25 LSB battery 2 voltage LSB value. 0.1V steps. 50 = 5.5V only pos. voltages
+				//#26 MSB
+      byte temperature1;        //#27 Temperature 1. Offset of 20. a value of 20 = 0°C
+      byte temperature2;        //#28 Temperature 2. Offset of 20. a value of 20 = 0°C
+      byte fuel_procent;        //#29 Fuel capacity in %. Values 0--100
+				//graphical display ranges: 0-100% with new firmwares of the radios MX12/MX20/...
+      uint16_t fuel_ml;         //#30 LSB Fuel in ml scale. Full = 65535!
+				//#31 MSB
+      uint16_t rpm;             //#32 RPM in 10 RPM steps. 300 = 3000rpm
+				//#33 MSB
+      uint16_t altitude;        //#34 altitude in meters. offset of 500, 500 = 0m
+				//#35 MSB
+      uint16_t climbrate_L;     //#36 climb rate in 0.01m/s. Value of 30000 = 0.00 m/s
+				//#37 MSB
+      byte climbrate3s;         //#38 climb rate in m/3sec. Value of 120 = 0m/3sec
+      uint16_t current;         //#39 current in 0.1A steps 100 == 10,0A
+    				//#40 MSB current display only goes up to 99.9 A (continuous)
+      uint16_t main_voltage;    //#41 LSB Main power voltage using 0.1V steps 100 == 10,0V
+				//#42 MSB (Appears in GAM display right as alternate display.)
+      uint16_t batt_cap;        //#43 LSB used battery capacity in 10mAh steps
+				//#44 MSB 
+      uint16_t speed;           //#45 LSB (air?) speed in km/h(?) we are using ground speed here per default
+				//#46 MSB speed
+      byte min_cell_volt;       //#47 minimum cell voltage in 2mV steps. 124 = 2,48V
+      byte min_cell_volt_num;   //#48 number of the cell with the lowest voltage
+      uint16_t rpm2;            //#49 LSB 2nd RPM in 10 RPM steps. 100 == 1000rpm
+				//#50 MSB
+      byte general_error_number;//#51 General Error Number (Voice Error == 12) TODO: more documentation
+      byte pressure;            //#52 High pressure up to 16bar. 0,1bar scale. 20 == 2.0bar
+      byte version;             //#53 version number (Bytes 35 .43 new but not yet in the record in the display!)
+      uint8_t DummyJ[2];
+      byte stop_byte;           //#56 stop byte 0x7D
+      byte parity;              //#57 CHECKSUM CRC/Parity (calculated dynamicaly)
       } GamData;
 
 			static float fHottGetGpsDegree(uint16_t high, uint16_t low)
