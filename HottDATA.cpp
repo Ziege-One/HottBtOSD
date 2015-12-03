@@ -46,6 +46,7 @@ static void vUpdateGlobalData(void);
 static bool bIsBtConnected(void);
 
 /* local data */
+static uint32_t lastpacketreceived = 0;
 static uint16_t ui16GpsOk = 0;
 static uint16_t ui16GpsFail = 0;
 static uint16_t ui16EamOk = 0;
@@ -526,6 +527,7 @@ struct
 
 			static void vUpdateGlobalData(void)
 			{
+                                  lastpacketreceived = millis();
                                   				
                                   osd_vbat_A = GamData.Battery1;
                                   osd_vbat_A = osd_vbat_A / 10;
@@ -580,7 +582,7 @@ struct
 #ifdef HOTT_DEBUG
 				static uint32_t ui32FirstPacketTime = millis();
 				DEBUG_SERIAL.print("HoTT active for ");
-				//DEBUG_SERIAL.print(lastpacketreceived - ui32FirstPacketTime);
+				DEBUG_SERIAL.print(lastpacketreceived - ui32FirstPacketTime);
 				DEBUG_SERIAL.println(" ms.");
 				DEBUG_SERIAL.print("GPS (OK/FAIL): ");
 				DEBUG_SERIAL.print(ui16GpsOk);
@@ -599,22 +601,8 @@ struct
 				DEBUG_SERIAL.print(" / ");
 				DEBUG_SERIAL.println(ui16RxFail);
 
-				//DEBUG_SERIAL.print("Roll/Pitch/Height: ");
-				//DEBUG_SERIAL.print(uav_roll);
-				//DEBUG_SERIAL.print(" / ");
-				//DEBUG_SERIAL.print(uav_pitch);
-				//DEBUG_SERIAL.print(" / ");
-				//DEBUG_SERIAL.println(uav_alt);
-
-                        	DEBUG_SERIAL.print("bat:");
-	                	DEBUG_SERIAL.println(GamData.Battery1);
-	                	DEBUG_SERIAL.print("amp:");
-	                	DEBUG_SERIAL.println(GamData.current);
-	                	DEBUG_SERIAL.print("rssi:");
-	                	//DEBUG_SERIAL.println(GamData.fuel_ml);
-
                                 //GAM 
-                                /*DEBUG_SERIAL.print("cell1:");
+                                DEBUG_SERIAL.print("cell1:");
 		                DEBUG_SERIAL.println(GamData.cell[1]);
                                 DEBUG_SERIAL.print("cell2:");
 		                DEBUG_SERIAL.println(GamData.cell[2]);
@@ -626,7 +614,7 @@ struct
 		                DEBUG_SERIAL.println(GamData.cell[5]);
                                 DEBUG_SERIAL.print("cell6:");
 		                DEBUG_SERIAL.println(GamData.cell[6]);
-                              */  DEBUG_SERIAL.print("Battery1:");
+                                DEBUG_SERIAL.print("Battery1:");
 		                DEBUG_SERIAL.println(GamData.Battery1);
                                 DEBUG_SERIAL.print("Battery2:");
 		                DEBUG_SERIAL.println(GamData.Battery2);
@@ -635,9 +623,9 @@ struct
                                 DEBUG_SERIAL.print("temperature2:");
 		                DEBUG_SERIAL.println(GamData.temperature2);
                                 DEBUG_SERIAL.print("rpm:");
-		                //DEBUG_SERIAL.println(GamData.rpm);
+		                DEBUG_SERIAL.println(GamData.rpm);
                                 DEBUG_SERIAL.print("altitude:");
-		                //DEBUG_SERIAL.println(GamData.altitude);
+		                DEBUG_SERIAL.println(GamData.altitude);
                                 DEBUG_SERIAL.print("current:");
 		                DEBUG_SERIAL.println(GamData.current);
                                 DEBUG_SERIAL.print("main_voltage:");
