@@ -50,8 +50,8 @@ void updateVars() {
     float rads = fabs(osd_home_lat) * 0.0174532925;
     double scaleLongDown = cos(rads);
     double scaleLongUp   = 1.0f/cos(rads);
-    
-    if (osd_got_home == 1) {
+    // come form Hott
+    /*if (osd_got_home == 1) {
         //DST to Home
         dstlat = fabs(osd_home_lat - osd_lat) * 111319.5;
         dstlon = fabs(osd_home_lon - osd_lon) * 111319.5 * scaleLongDown;
@@ -70,7 +70,7 @@ void updateVars() {
         }
     else 
         osd_home_distance = 0;
-
+*/
     dt = millis();
     if (osd_home_distance > max_home_distance) max_home_distance = osd_home_distance;
     if (osd_airspeed > max_osd_airspeed) max_osd_airspeed = osd_airspeed;

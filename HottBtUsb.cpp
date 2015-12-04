@@ -27,7 +27,7 @@
 #define HOTT_WAIT_GAM		6
 #define HOTT_REQUEST_RX		7
 #define HOTT_WAIT_RX		8
-#define HOTT_IDLE			10
+#define HOTT_IDLE		10
 
 /* local functions */
 static void vHottFormatGpsString(char *buffer, uint16_t high, uint16_t low);
@@ -46,6 +46,8 @@ static void vUpdateGlobalData(void);
 static bool bIsBtConnected(void);
 
 /* local data */
+static uint8_t crlf_count = 0;
+static uint32_t lastpacketreceived = 0;
 static uint16_t ui16GpsOk = 0;
 static uint16_t ui16GpsFail = 0;
 static uint16_t ui16EamOk = 0;
@@ -54,6 +56,8 @@ static uint16_t ui16GamOk = 0;
 static uint16_t ui16GamFail = 0;
 static uint16_t ui16RxOk = 0;
 static uint16_t ui16RxFail = 0;
+
+void uploadFont();
 
 /* local structures */
 struct
@@ -75,7 +79,7 @@ struct
 		uint16_t LatitudeSec; //18+19
 		uint16_t longitudeMin; //20+21
 		uint16_t longitudeSec; //22+23
-		uint16_t ui16Direction; //24+25
+		uint16_t flightDirection; //24+25
 		uint8_t LatitudeNS; //
 		uint8_t longitudeEW; //
 		uint16_t climbrate1s;
@@ -216,7 +220,7 @@ struct
 				pinMode(PIN_BT_PIN34, OUTPUT);
 				pinMode(PIN_BT_STATUS, INPUT);
 				digitalWrite(PIN_BT_PIN34, LOW);
-				TELEMETRY_SERIAL.begin(115200);
+				TELEMETRY_SERIAL.begin(57600); // DATA Port for Front upload
                                 
 #ifdef HOTT_DEBUG
                                 DEBUG_SERIAL.begin(57600);
@@ -398,6 +402,33 @@ struct
 					break;
 				case HOTT_IDLE:
 				default:
+                                       /* allow CLI to be started by hitting enter 3 times, if no
+                                        heartbeat packets have been received */
+                                        if (millis() < 20000 ) 
+                                        {
+                                          if ( TELEMETRY_SERIAL.available())
+                                          {
+                                            uint8_t c = char(TELEMETRY_SERIAL.read());
+                                            if (c == '\n' || c == '\r') 
+                                            {
+                                              crlf_count++;
+                                            } 
+                                            else 
+                                            {
+                                              crlf_count = 0;
+                                            }
+                                            if (crlf_count == 3) 
+                                            {
+                                              uploadFont();
+                                            }
+                                          }
+                                        }
+                                        else
+                                        {
+                                          TELEMETRY_SERIAL.begin(115200); // DATA Port for Telemetrie 
+                                          ui8State = HOTT_REQUEST_GPS;
+                                        }
+                                        /*
 					if (bIsBtConnected())
 					{
 						ui8State = HOTT_REQUEST_GPS;
@@ -408,7 +439,7 @@ struct
 						DEBUG_SERIAL.println("HOTT no BT");
 #endif
                                                 ui8State = HOTT_REQUEST_GPS;
-					}
+					} */
 					break;
 				}
 			}
@@ -526,6 +557,7 @@ struct
 
 			static void vUpdateGlobalData(void)
 			{
+                                  lastpacketreceived = millis();
                                   				
                                   osd_vbat_A = GamData.Battery1;
                                   osd_vbat_A = osd_vbat_A / 10;
@@ -533,13 +565,21 @@ struct
                                   osd_curr_A *= 10;
                                   mah_used = GamData.batt_cap;
                                   mah_used *= 10;
-  
+                                  
+                                  osd_lat = ui32HottGetGpsDegree(GPSData.LatitudeMin,GPSData.LatitudeSec) / 10000000.0;
+                                  osd_lon = ui32HottGetGpsDegree(GPSData.longitudeMin,GPSData.longitudeSec) / 10000000.0;
+                                  osd_satellites_visible = GPSData.GPSNumSat;
+                                  osd_fix_type = GPSData.GPSFixChar;
+                                  osd_heading = GPSData.flightDirection * 2;
+                                  osd_home_direction = GPSData.HomeDirection / 12;
+                                  osd_home_distance = GPSData.distance;
+                                  osd_alt = GPSData.altitude - 500;
+                                  osd_airspeed = GPSData.GPSSpeed;
                                  /*
 				 GPSData.ui16DistanceToHome
 				 
 
-				uav_lat = ui32HottGetGpsDegree(GPSData.ui16LatitudeHigh,
-						GPSData.ui16LatitudeLow); 	// latitude (deg * 1e7)
+				uav_lat = ui32HottGetGpsDegree(GPSData.ui16LatitudeHigh,GPSData.ui16LatitudeLow); 	// latitude (deg * 1e7)
 				uav_lon = ui32HottGetGpsDegree(GPSData.ui16LongitudeHigh,
 						GPSData.ui16LongitudeLow);	// longitude
 				uav_satellites_visible = GPSData.ui8Sat;// number of satellites
@@ -599,19 +639,71 @@ struct
 				DEBUG_SERIAL.print(" / ");
 				DEBUG_SERIAL.println(ui16RxFail);
 
-				DEBUG_SERIAL.print("Roll/Pitch/Height: ");
-				DEBUG_SERIAL.print(uav_roll);
-				DEBUG_SERIAL.print(" / ");
-				DEBUG_SERIAL.print(uav_pitch);
-				DEBUG_SERIAL.print(" / ");
-				DEBUG_SERIAL.println(uav_alt);
+                                //GPS
+                                DEBUG_SERIAL.print("flightDirection:");
+		                DEBUG_SERIAL.println(GPSData.flightDirection);
+                                DEBUG_SERIAL.print("GPSSpeed:");
+		                DEBUG_SERIAL.println(GPSData.GPSSpeed);
+                                DEBUG_SERIAL.print("LatitudeNS:");
+		                DEBUG_SERIAL.println(GPSData.LatitudeNS);
+                                DEBUG_SERIAL.print("LatitudeMin:");
+		                DEBUG_SERIAL.println(GPSData.LatitudeMin);
+                                DEBUG_SERIAL.print("LatitudeSec:");
+		                DEBUG_SERIAL.println(GPSData.LatitudeSec);
+                                DEBUG_SERIAL.print("Lat:");
+		                DEBUG_SERIAL.println(ui32HottGetGpsDegree(GPSData.LatitudeMin,GPSData.LatitudeSec));
+                                DEBUG_SERIAL.print("Lat:");
+		                DEBUG_SERIAL.println(ui32HottGetGpsDegree(GPSData.LatitudeMin,GPSData.LatitudeSec)/10000000.0);
+                                DEBUG_SERIAL.print("longitudeEW:");                                
+		                DEBUG_SERIAL.println(GPSData.longitudeEW);                                 
+                                DEBUG_SERIAL.print("longitudeMin:");
+		                DEBUG_SERIAL.println(GPSData.longitudeMin);
+                                DEBUG_SERIAL.print("longitudeSec:");
+		                DEBUG_SERIAL.println(GPSData.longitudeSec);
+                                DEBUG_SERIAL.print("Lon:");
+		                DEBUG_SERIAL.println(ui32HottGetGpsDegree(GPSData.longitudeMin,GPSData.longitudeSec));
+                                DEBUG_SERIAL.print("Lon:");
+		                DEBUG_SERIAL.println(ui32HottGetGpsDegree(GPSData.longitudeMin,GPSData.longitudeSec)/10000000.0);
+                                DEBUG_SERIAL.print("distance:");
+		                DEBUG_SERIAL.println(GPSData.distance);
+                                DEBUG_SERIAL.print("altitude:");
+		                DEBUG_SERIAL.println(GPSData.altitude);
 
-	DEBUG_SERIAL.print("rbat:");
-	DEBUG_SERIAL.println(uav_bat);
-	DEBUG_SERIAL.print("amp:");
-	DEBUG_SERIAL.println(uav_amp);
-	DEBUG_SERIAL.print("rssi:");
-	DEBUG_SERIAL.println(uav_rssi);
+
+
+                                //GAM 
+                                /*DEBUG_SERIAL.print("cell1:");
+		                DEBUG_SERIAL.println(GamData.cell[1]);
+                                DEBUG_SERIAL.print("cell2:");
+		                DEBUG_SERIAL.println(GamData.cell[2]);
+                                DEBUG_SERIAL.print("cell3:");
+		                DEBUG_SERIAL.println(GamData.cell[3]);
+                                DEBUG_SERIAL.print("cell4:");
+		                DEBUG_SERIAL.println(GamData.cell[4]);
+                                DEBUG_SERIAL.print("cell5:");
+		                DEBUG_SERIAL.println(GamData.cell[5]);
+                                DEBUG_SERIAL.print("cell6:");
+		                DEBUG_SERIAL.println(GamData.cell[6]);
+                                DEBUG_SERIAL.print("Battery1:");
+		                DEBUG_SERIAL.println(GamData.Battery1);
+                                DEBUG_SERIAL.print("Battery2:");
+		                DEBUG_SERIAL.println(GamData.Battery2);
+                                DEBUG_SERIAL.print("temperature1:");
+		                DEBUG_SERIAL.println(GamData.temperature1);
+                                DEBUG_SERIAL.print("temperature2:");
+		                DEBUG_SERIAL.println(GamData.temperature2);
+                                DEBUG_SERIAL.print("rpm:");
+		                DEBUG_SERIAL.println(GamData.rpm);
+                                DEBUG_SERIAL.print("altitude:");
+		                DEBUG_SERIAL.println(GamData.altitude);
+                                DEBUG_SERIAL.print("current:");
+		                DEBUG_SERIAL.println(GamData.current);
+                                DEBUG_SERIAL.print("main_voltage:");
+		                DEBUG_SERIAL.println(GamData.main_voltage);
+                                DEBUG_SERIAL.print("batt_cap:");
+		                DEBUG_SERIAL.println(GamData.batt_cap); */
+
+
 
 
 

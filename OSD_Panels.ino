@@ -299,7 +299,8 @@ void panVel(int first_col, int first_line){
 void panAirSpeed(int first_col, int first_line){
     osd.setPanel(first_col, first_line);
     osd.openPanel();
-    osd.printf("%c%3.0f%c", 0x13, (double)(osd_airspeed * converts), spe);
+    //osd.printf("%c%3.0f%c", 0x13, (double)(osd_airspeed * converts), spe);
+    osd.printf("%c%3.0f%c", 0x13, (double)(osd_airspeed), spe);
     osd.closePanel();
 }
 
@@ -602,7 +603,7 @@ void panRose(int first_col, int first_line){
 // Status : not tested
 
 void panHomeDir(int first_col, int first_line){
-    if (osd_got_home == 1) {
+    if (osd_home_distance > 10) {
         osd.setPanel(first_col, first_line);
         osd.openPanel();
         showArrow((uint8_t)osd_home_direction,0);
