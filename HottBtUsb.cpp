@@ -572,9 +572,10 @@ struct
                                   if(GPSData.GPSFixChar == 0x2d || GPSData.GPSFixChar == 0x32) osd_fix_type = 0; 
                                   else if(GPSData.GPSFixChar == 0x33 || GPSData.GPSFixChar == 0x44) osd_fix_type = 2;
                                   osd_heading = GPSData.flightDirection * 2;
-                                  osd_home_direction = GPSData.HomeDirection / 12;
+                                  osd_home_direction = GPSData.HomeDirection / 24;
+                                  if(osd_home_direction < 1) osd_home_direction = 1;                                   
                                   osd_home_distance = GPSData.distance;
-                                  osd_alt = GPSData.altitude - 500;
+                                  osd_alt = GPSData.altitude;
                                   osd_airspeed = GPSData.GPSSpeed;
 
                                  /*
