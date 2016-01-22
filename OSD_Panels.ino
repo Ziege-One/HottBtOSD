@@ -691,22 +691,27 @@ void panOff(){
       else if(ch_toggle == 7) ch_raw = chan7_raw;
       else if(ch_toggle == 8) ch_raw = chan8_raw;
 
+      ch_raw = analogRead(A1); //RSSI
+      
       //Switch mode by value
       if (switch_mode == 0){
         //First panel
-        if (ch_raw < 1200 && panel != 0) {
+        if (ch_raw < 200 && panel != 0) {  
+        //if (ch_raw < 1200 && panel != 0) {  
           osd_clear = 1;
           //osd.clear();
           panel = 0;
         }
         //Second panel
-        else if (ch_raw >= 1200 && ch_raw <= 1800 && panel != 1) { //second panel
+        else if (ch_raw >= 200 && ch_raw <= 800 && panel != 1) { //second panel
+        //else if (ch_raw >= 1200 && ch_raw <= 1800 && panel != 1) { //second panel
           osd_clear = 1;
           //osd.clear();
           panel = 1;
         }
         //Panel off
-        else if (ch_raw > 1800 && panel != npanels) {
+        else if (ch_raw > 800 && panel != npanels) {
+        //else if (ch_raw > 1800 && panel != npanels) {
           osd_clear = 1;
           //osd.clear();
           panel = npanels; //off panel

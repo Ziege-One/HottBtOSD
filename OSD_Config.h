@@ -7,8 +7,8 @@
 #define VER 10
 
 //protocol used
-//#define PROTOCOL_HOTT_BT      //Bluetooth 
-#define PROTOCOL_HOTT_DATA    //DATA Port
+#define PROTOCOL_HOTT_BT      //Bluetooth 
+//#define PROTOCOL_HOTT_DATA    //DATA Port
 
 
 
