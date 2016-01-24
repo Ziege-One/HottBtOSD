@@ -44,6 +44,7 @@ void writePanels(){
       if(ISa(panel,Pit_BIT)) panPitch(panPitch_XY[0][panel], panPitch_XY[1][panel]); //5x1
       if(ISa(panel,Rol_BIT)) panRoll(panRoll_XY[0][panel], panRoll_XY[1][panel]); //5x1
       if(ISa(panel,BatA_BIT)) panBatt_A(panBatt_A_XY[0][panel], panBatt_A_XY[1][panel]); //7x1
+      if(ISa(panel,BatB_BIT)) panBatt_B(panBatt_B_XY[0][panel], panBatt_B_XY[1][panel]); //7x1
       if(ISa(panel,GPSats_BIT)) panGPSats(panGPSats_XY[0][panel], panGPSats_XY[1][panel]); //5x1
       if(ISa(panel,GPS_BIT)) panGPS(panGPS_XY[0][panel], panGPS_XY[1][panel]); //12x3
       if(ISa(panel,Bp_BIT)) panBatteryPercent(panBatteryPercent_XY[0][panel], panBatteryPercent_XY[1][panel]); //
@@ -502,6 +503,25 @@ void panBatt_A(int first_col, int first_line){
     else osd.printf("%c%5.2f%c%c", 0xBD, (double)osd_vbat_A, 0xC9, osd_battery_pic_A);
     */
     osd.printf("%c%5.2f%c", 0xBC, (double)osd_vbat_A, 0x0D);
+    osd.closePanel();
+}
+
+/* **************************************************************** */
+// Panel  : panBattery B (Voltage 2)
+// Needs  : X, Y locations
+// Output : Voltage value as in XX.X and symbol of over all battery status
+// Size   : 1 x 8  (rows x chars)
+// Staus  : done
+
+void panBatt_B(int first_col, int first_line){
+    osd.setPanel(first_col, first_line);
+    osd.openPanel();
+    /*************** This commented code is for the next ArduPlane Version
+    if(osd_battery_remaining_A > 100){
+        osd.printf(" %c%5.2f%c", 0xBD, (double)osd_vbat_A, 0xC9);
+    else osd.printf("%c%5.2f%c%c", 0xBD, (double)osd_vbat_A, 0xC9, osd_battery_pic_A);
+    */
+    osd.printf("%c%5.2f%c", 0xBC, (double)osd_vbat_B, 0x0D);
     osd.closePanel();
 }
 

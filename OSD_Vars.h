@@ -66,6 +66,7 @@ static uint8_t      spe = 0;
 static uint8_t      high = 0;
 static uint8_t      temps = 0;
 static float        osd_vbat_A = 0;                 // Battery A voltage in milivolt
+static float        osd_vbat_B = 0;                 // Battery A voltage in milivolt
 static int16_t      osd_curr_A = 0;                 // Battery A current
 static uint8_t      osd_battery_remaining_A = 0;    // 0 to 100 <=> 0 to 1000
 static int8_t       start_battery_reading = 0;    // 0 to 100 <=> 0 to 1000
@@ -177,7 +178,7 @@ byte modeScreen = 0; //NTSC:0, PAL:1
 byte panPitch_XY[2][npanels]; // = { 11,1 };
 byte panRoll_XY[2][npanels]; // = { 23,7 };
 byte panBatt_A_XY[2][npanels]; // = { 23,1 };
-//byte panBatt_B_XY[2]; // = { 23,3 };
+byte panBatt_B_XY[2][npanels]; // = { 23,3 };
 byte panGPSats_XY[2][npanels]; // = { 2,12 };
 byte panCOG_XY[2][npanels]; // = { 2,11 };
 byte panGPS_XY[2][npanels]; // = { 2,13 };

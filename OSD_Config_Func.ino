@@ -215,9 +215,9 @@ void readPanelSettings() {
     panBatt_A_XY[0][panel] = readEEPROM(panBatt_A_x_ADDR + offset);
     panBatt_A_XY[1][panel] = checkPAL(readEEPROM(panBatt_A_y_ADDR + offset));
 
-    //setBit(panA_REG, BatB_BIT, readEEPROM(panBatt_B_en_ADDR));
-    //panBatt_B_XY[0] = readEEPROM(panBatt_B_x_ADDR);
-    //panBatt_B_XY[1] = checkPAL(readEEPROM(panBatt_B_y_ADDR));
+    setBit(panA_REG[panel], BatB_BIT, readEEPROM(panBatt_B_en_ADDR + offset));
+    panBatt_B_XY[0][panel] = readEEPROM(panBatt_B_x_ADDR + offset);
+    panBatt_B_XY[1][panel] = checkPAL(readEEPROM(panBatt_B_y_ADDR + offset));
 
     setBit(panA_REG[panel], GPSats_BIT, readEEPROM(panGPSats_en_ADDR + offset));
     panGPSats_XY[0][panel] = readEEPROM(panGPSats_x_ADDR + offset);

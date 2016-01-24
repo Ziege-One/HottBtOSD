@@ -561,6 +561,8 @@ struct
                                   				
                                   osd_vbat_A = GamData.Battery1;
                                   osd_vbat_A = osd_vbat_A / 10;
+                                  osd_vbat_B = GamData.Battery2;
+                                  osd_vbat_B = osd_vbat_B / 10;                                  
                                   osd_curr_A = GamData.current;
                                   osd_curr_A *= 10;
                                   mah_used = GamData.batt_cap;

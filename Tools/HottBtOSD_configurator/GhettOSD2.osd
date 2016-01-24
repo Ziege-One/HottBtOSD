@@ -1,0 +1,45 @@
+Panel 1
+Battery A	1	14	True
+Battery B	21	3	True
+Visible Sats	26	0	True
+GPS Coord	3	2	False
+Heading	24	13	False
+Home Direction	14	13	True
+Home Distance	22	15	True
+Altitude	22	1	True
+Battery Percent	1	15	True
+Current	1	13	True
+Air Speed	1	2	False
+Panel 2
+Battery A	1	14	True
+Battery B	21	3	True
+Visible Sats	26	0	True
+GPS Coord	3	2	True
+Heading	24	13	False
+Home Direction	14	13	True
+Home Distance	22	15	True
+Altitude	22	1	True
+Battery Percent	1	15	True
+Current	1	13	True
+Air Speed	1	2	False
+Configuration
+Model Type	1
+Units	0
+Overspeed	130
+Stall	0
+Battery	101
+RSSI High	255
+RSSI Low	0
+RSSI Enable Raw	0
+Toggle Channel	3
+Auto Screen Switch	0
+Chanel Rotation Switching	0
+Video Mode	1
+Battery Warning Level	10
+RSSI Warning Level	10
+OSD Brightness	1
+Call Sign	ziegeone
+Sign Air Speed	0
+Sign Ground  Speed	0
+Sign Home Altitude	0
+Sign MSL Altitude	0

@@ -30,6 +30,7 @@
 // Panel 8bit REGISTER with BIT positions
 // panA_REG Byte has:
 //#define Cen_BIT        0
+#define BatB_BIT       0
 #define Pit_BIT        1
 #define Rol_BIT        2
 #define BatA_BIT       3
