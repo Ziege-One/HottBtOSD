@@ -63,7 +63,18 @@ void uploadFont();
 struct
 	__attribute__((__packed__))
 	{
-        uint8_t DummyH[16];
+        uint8_t DummyH[5];
+        uint8_t Rec_RX_S_STR;
+        uint8_t Rec_RVOLT;
+        uint8_t Rec_TEMP;
+        uint8_t Rec_RX_dBm;
+        uint8_t Rec_RX_S_QUA;
+        uint8_t Rec_RLOW;
+        uint16_t Rec_LOST;
+        uint8_t Rec_TX_dBm;
+        uint8_t Rec_Null_Byte;
+        uint8_t sensorTextID;  
+        //uint8_t DummyH[16];
         uint8_t flightDirection;  //#07 119 = Flightdir./dir. 1 = 2°; 0°(North), 90°(East), 180°(South), 270°(West) */
         uint16_t GPSSpeed;        //#08 8 = /GPS speed low byte 8km/h */
                                   //#09 MSB 
@@ -130,7 +141,18 @@ struct
 struct
       __attribute__((__packed__))
       {
-      uint8_t DummyH[16];
+      uint8_t DummyH[5];
+      uint8_t Rec_RX_S_STR;
+      uint8_t Rec_RVOLT;
+      uint8_t Rec_TEMP;
+      uint8_t Rec_RX_dBm;
+      uint8_t Rec_RX_S_QUA;
+      uint8_t Rec_RLOW;
+      uint16_t Rec_LOST;
+      uint8_t Rec_TX_dBm;
+      uint8_t Rec_Null_Byte;
+      uint8_t sensorTextID;  
+      //uint8_t DummyH[16];
       byte cell_L[7];           //#7 Volt Cell_L 1 (in 2 mV increments, 210 == 4.20 V)
                                 //#8 Volt Cell_L 2 (in 2 mV increments, 210 == 4.20 V)
                                 //#9 Volt Cell_L 3 (in 2 mV increments, 210 == 4.20 V)
@@ -175,7 +197,18 @@ struct
 struct
       __attribute__((__packed__))
       {
-      uint8_t DummyH[16];
+      uint8_t DummyH[5];
+      uint8_t Rec_RX_S_STR;
+      uint8_t Rec_RVOLT;
+      uint8_t Rec_TEMP;
+      uint8_t Rec_RX_dBm;
+      uint8_t Rec_RX_S_QUA;
+      uint8_t Rec_RLOW;
+      uint16_t Rec_LOST;
+      uint8_t Rec_TX_dBm;
+      uint8_t Rec_Null_Byte;
+      uint8_t sensorTextID;  
+      //uint8_t DummyH[16];
       byte cell[6];	        //#17 Volt Cell 1 (in 2 mV increments, 210 == 4.20 V)
 	                        //#18 Volt Cell 2 (in 2 mV increments, 210 == 4.20 V)
 			        //#19 Volt Cell 3 (in 2 mV increments, 210 == 4.20 V)
@@ -555,6 +588,8 @@ struct
 			static void vUpdateGlobalData(void)
 			{
                                   lastpacketreceived = millis();
+                                  
+                                  osd_rssi = GamData.Rec_RX_S_STR;
                                   				
                                   osd_vbat_A = GamData.Battery1;
                                   osd_vbat_A = osd_vbat_A / 10;

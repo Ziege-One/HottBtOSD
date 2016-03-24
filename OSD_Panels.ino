@@ -190,11 +190,11 @@ void panEff(int first_col, int first_line){
 void panRSSI(int first_col, int first_line){
     osd.setPanel(first_col, first_line);
     osd.openPanel();
-    rssi = (int16_t)osd_rssi;
+    rssi = osd_rssi;
     //if (rssi > rssical) rssi = rssical;
     //else if (rssi < rssipersent) rssi = rssipersent;
 
-    if(!rssiraw_on) rssi = (int16_t)((float)(rssi - rssipersent)/(float)(rssical-rssipersent)*100.0f);
+    //if(!rssiraw_on) rssi = (int16_t)((float)(rssi - rssipersent)/(float)(rssical-rssipersent)*100.0f);
 //    if (rssi < -99) rssi = -99;
     osd.printf("%c%3i%c", 0x09, rssi, 0x25);
 //    osd.printf("%c%3i%c", 0x09, osd_clear, 0x25); 

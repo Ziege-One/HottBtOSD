@@ -209,7 +209,7 @@ namespace OSD
 
             //panelItems[a++] = new Tuple<string, Func<int, int, int>, int, int, int, int, int>("Warnings", pan.panWarn, 9, 0, panWarn_en_ADDR, panWarn_x_ADDR, panWarn_y_ADDR);
             //panelItems[a++] = new Tuple<string, Func<int, int, int>, int, int, int, int, int>("Time", pan.panTime, 0, 0, panTime_en_ADDR, panTime_x_ADDR, panTime_y_ADDR);
-            //panelItems[a++] = new Tuple<string, Func<int, int, int>, int, int, int, int, int>("RSSI", pan.panRSSI, 12, 1, panRSSI_en_ADDR, panRSSI_x_ADDR, panRSSI_y_ADDR);
+            panelItems[a++] = new Tuple<string, Func<int, int, int>, int, int, int, int, int>("RSSI", pan.panRSSI, 12, 1, panRSSI_en_ADDR, panRSSI_x_ADDR, panRSSI_y_ADDR);
             //            panelItems[a++] = new Tuple<string, Func<int, int, int>, int, int, int, int, int>("Tune", pan.panTune, 1, 1, panTune_en_ADDR, panTune_x_ADDR, panTune_y_ADDR);
             //panelItems[a++] = new Tuple<string, Func<int, int, int>, int, int, int, int, int>("Efficiency", pan.panEff, 1, 11, panEff_en_ADDR, panEff_x_ADDR, panEff_y_ADDR);
             //panelItems[a++] = new Tuple<string, Func<int, int, int>, int, int, int, int, int>("Call Sign", pan.panCALLSIGN, 4, 0, panCALLSIGN_en_ADDR, panCALLSIGN_x_ADDR, panCALLSIGN_y_ADDR);
@@ -387,7 +387,7 @@ namespace OSD
 
             //panelItems2[a++] = new Tuple<string, Func<int, int, int>, int, int, int, int, int>("Warnings", pan.panWarn, 9, 10, panWarn_en_ADDR, panWarn_x_ADDR, panWarn_y_ADDR);
             //panelItems2[a++] = new Tuple<string, Func<int, int, int>, int, int, int, int, int>("Time", pan.panTime, 0, 0, panTime_en_ADDR, panTime_x_ADDR, panTime_y_ADDR);
-            //panelItems2[a++] = new Tuple<string, Func<int, int, int>, int, int, int, int, int>("RSSI", pan.panRSSI, 12, 1, panRSSI_en_ADDR, panRSSI_x_ADDR, panRSSI_y_ADDR);
+            panelItems2[a++] = new Tuple<string, Func<int, int, int>, int, int, int, int, int>("RSSI", pan.panRSSI, 12, 1, panRSSI_en_ADDR, panRSSI_x_ADDR, panRSSI_y_ADDR);
             //            panelItems[a++] = new Tuple<string, Func<int, int, int>, int, int, int, int, int>("Tune", pan.panTune, 1, 1, panTune_en_ADDR, panTune_x_ADDR, panTune_y_ADDR);
             //panelItems2[a++] = new Tuple<string, Func<int, int, int>, int, int, int, int, int>("Efficiency", pan.panEff, 1, 11, panEff_en_ADDR, panEff_x_ADDR, panEff_y_ADDR);
             //panelItems2[a++] = new Tuple<string, Func<int, int, int>, int, int, int, int, int>("Call Sign", pan.panCALLSIGN, 4, 0, panCALLSIGN_en_ADDR, panCALLSIGN_x_ADDR, panCALLSIGN_y_ADDR);
@@ -3204,16 +3204,17 @@ namespace OSD
                    //     (node.Text == "Roll"))
                    //     LIST_items.Nodes["Attitude"].Nodes.Add(node);
 
-                   // if ((node.Text == "Call Sign") ||
-                   //     (node.Text == "RSSI") ||
+                   if (//(node.Text == "Call Sign") ||
+                          (node.Text == "RSSI"))// ||
                    //     (node.Text == "Flight Mode") ||
                    //     //(node.Text == "Temperature") ||
                    //     //(node.Text == "Throttle") ||
                    //     (node.Text == "Time") ||
                    //     (node.Text == "Warnings"))
-                   //     LIST_items.Nodes["General"].Nodes.Add(node);
+                        LIST_items.Nodes["General"].Nodes.Add(node);
 
                     if ((node.Text == "Battery A") ||
+                        (node.Text == "Battery B") ||
                         (node.Text == "Battery Percent") ||
                         (node.Text == "Current"))// ||
                         //(node.Text == "Efficiency"))
@@ -3315,16 +3316,17 @@ namespace OSD
                    //     (node.Text == "Roll"))
                    //     LIST_items2.Nodes["Attitude"].Nodes.Add(node);
 
-                    //if  ((node.Text == "Call Sign") ||
-                        //(node.Text == "RSSI") ||
+                    if  (//(node.Text == "Call Sign") ||
+                        (node.Text == "RSSI")) //||
                         //(node.Text == "Flight Mode") ||
                         //(node.Text == "Temperature") ||
                         //(node.Text == "Throttle") ||
                         //(node.Text == "Time") ||
                         //(node.Text == "Warnings"))
-                        //LIST_items2.Nodes["General"].Nodes.Add(node);
+                        LIST_items2.Nodes["General"].Nodes.Add(node);
 
                     if ((node.Text == "Battery A") ||
+                        (node.Text == "Battery B") ||
                         (node.Text == "Battery Percent") ||
                         (node.Text == "Current")) //||
                         //(node.Text == "Efficiency"))

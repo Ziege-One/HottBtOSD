@@ -558,6 +558,8 @@ struct
 			static void vUpdateGlobalData(void)
 			{
                                   lastpacketreceived = millis();
+                                  
+                                  osd_rssi = ReceiverData.ui8Strength; //ui8Dbm;
                                   				
                                   osd_vbat_A = GamData.Battery1;
                                   osd_vbat_A = osd_vbat_A / 10;
